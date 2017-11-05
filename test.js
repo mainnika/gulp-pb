@@ -20,4 +20,17 @@ describe('Plugin', function () {
 			cb();
 		});
 	})
+
+	it('should generate d.ts file from js stream', function (cb) {
+
+		var stream = gulp.src('fixture/src/**/*.proto')
+			.pipe(pb.js())
+			.pipe(pb.ts());
+
+		getStream.array(stream).then(function (files) {
+			assert.equal(files.length, 1);
+			assert.equal(path.basename(files[0].path), 'def.d.ts');
+			cb();
+		});
+	})
 })

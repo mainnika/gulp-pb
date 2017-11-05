@@ -4,6 +4,7 @@ var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through2');
 var pbjs = require("protobufjs/cli/pbjs");
+var cp = require('child_process');
 var replaceExt = require('replace-ext');
 
 var replaceExtension = function (fp, ex) {
@@ -52,6 +53,41 @@ var js = function generateJs() {
 	})
 }
 
+var ts = function generateTs() {
+
+	return through.obj(function (file, enc, cb) {
+
+		if (!file.isBuffer()) {
+			cb(new gutil.PluginError('gulp-pb', 'pbts requires buffer file'));
+			return;
+		}
+
+		var pbts = cp.fork(require.resolve("protobufjs/bin/pbts"), ['-'], {
+			stdio: ['pipe', 'pipe', 'inherit', 'ipc'],
+		});
+
+		var dts = [];
+		var self = this;
+
+		pbts.stdin.write(file.contents);
+		pbts.stdin.end();
+		pbts.stdout.on('data', dts.push.bind(dts));
+
+		pbts.on('close', function () {
+
+			self.push(new gutil.File(Object.assign({}, file, {
+				path: replaceExtension(file.path, '.d.ts'),
+				contents: Buffer.concat(dts),
+			})));
+
+			cb();
+		});
+
+		pbts.on('error', cb);
+	})
+}
+
 Object.assign(module.exports, {
 	js: js,
+	ts: ts,
 })
