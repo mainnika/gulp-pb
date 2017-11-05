@@ -1,0 +1,43 @@
+{
+  "name": "gulp-pb",
+  "version": "0.0.1",
+  "description": "A gulp plugin that uses protobufjs to convert .proto to javascript .js and typescript .d.ts",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mainnika/gulp-pb.git"
+  },
+  "keywords": [
+    "gulp",
+    "protobuf",
+    "protobufjs",
+    "typescript",
+    "javascript"
+  ],
+  "author": {
+    "name": "Nikita Tokarchuk",
+    "email": "nikita@tokarch.uk",
+    "url": "nikita.tokarch.uk"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mainnika/gulp-pb/issues"
+  },
+  "homepage": "https://github.com/mainnika/gulp-pb#readme",
+  "dependencies": {
+    "gulp-util": "^3.0.8",
+    "protobufjs": "^6.8.0",
+    "replace-ext": "^1.0.0",
+    "through2": "^2.0.3"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "get-stream": "^3.0.0",
+    "gulp": "^3.9.1",
+    "merge-stream": "^1.0.1",
+    "mocha": "^4.0.1"
+  }
+}
