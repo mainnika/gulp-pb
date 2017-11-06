@@ -29,7 +29,7 @@
   "homepage": "https://github.com/mainnika/gulp-pb#readme",
   "dependencies": {
     "gulp-util": "^3.0.8",
-    "protobufjs": "^6.8.0",
+    "protobufjs": "github:mainnika/protobuf.js",
     "replace-ext": "^1.0.0",
     "through2": "^2.0.3"
   },
