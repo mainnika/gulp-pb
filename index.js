@@ -11,6 +11,47 @@ var replaceExtension = function (fp, ex) {
 	return path.extname(fp) ? replaceExt(fp, ex) : fp;
 }
 
+var json = function generateJson() {
+
+	return through.obj(function (file, enc, cb) {
+
+		if (file.isNull()) {
+			cb(null, file);
+			return;
+		}
+
+		if (file.isStream()) {
+			cb(new gutil.PluginError('gulp-pb', 'Streaming not supported'));
+			return;
+		}
+
+		var self = this;
+
+		try {
+			pbjs.main([
+				'--target', 'json',
+				file.path,
+			], function (err, output) {
+				if (err)
+					throw err;
+
+				self.push(new gutil.File(Object.assign({}, file, {
+					path: replaceExtension(file.path, '.json'),
+					contents: Buffer.from(output),
+				})));
+
+				cb();
+			});
+		} catch (err) {
+			this.emit('error', new gutil.PluginError('gulp-pb', err, {
+				fileName: file.path,
+				showProperties: false
+			}));
+			cb(err);
+		}
+	})
+}
+
 var js = function generateJs() {
 
 	return through.obj(function (file, enc, cb) {
@@ -88,6 +129,7 @@ var ts = function generateTs() {
 }
 
 Object.assign(module.exports, {
+	json: json,
 	js: js,
 	ts: ts,
 })
